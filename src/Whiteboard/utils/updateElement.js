@@ -8,9 +8,11 @@ export const updateElement = (
   { id, x1, x2, y1, y2, type, index },
   elements
 ) => {
+  // copy 만들어서 새료운 배열의 요소로 대체
   const elementsCopy = [...elements];
 
   switch (type) {
+    case toolTypes.LINE:
     case toolTypes.RECTANGLE:
       const updatedElement = createElement({
         id,

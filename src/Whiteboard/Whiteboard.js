@@ -45,22 +45,22 @@ const Whiteboard = () => {
     const { clientX, clientY } = event;
     console.log(toolType);
 
-    if (toolType === toolTypes.RECTANGLE) {
+    if (toolType === toolTypes.RECTANGLE || toolType === toolTypes.LINE) {
       setAction(actions.DRAWING);
+
+      const element = createElement({
+        x1: clientX,
+        y1: clientY,
+        x2: clientX,
+        y2: clientY,
+        toolType,
+        id: uuid(),
+      });
+
+      setSelectedElement(element);
+
+      dispatch(updateElementInStore(element));
     }
-
-    const element = createElement({
-      x1: clientX,
-      y1: clientY,
-      x2: clientX,
-      y2: clientY,
-      toolType,
-      id: uuid(),
-    });
-
-    setSelectedElement(element);
-
-    dispatch(updateElementInStore(element));
   };
 
   const handleMouseUp = () => {
@@ -70,8 +70,8 @@ const Whiteboard = () => {
 
     if (selectedElementIndex !== -1) {
       if (action === actions.DRAWING) {
-        if (adjustElementCoordinates(elements[selectedElementIndex].type)) {
-          const { x1, y1, x2, y2 } = adjustmentRequired(
+        if (adjustmentRequired(elements[selectedElementIndex].type)) {
+          const { x1, x2, y1, y2 } = adjustElementCoordinates(
             elements[selectedElementIndex]
           );
 
@@ -80,8 +80,8 @@ const Whiteboard = () => {
               id: selectedElement.id,
               index: selectedElementIndex,
               x1,
-              y1,
               x2,
+              y1,
               y2,
               type: elements[selectedElementIndex].type,
             },
@@ -101,6 +101,7 @@ const Whiteboard = () => {
     if (action === actions.DRAWING) {
       // find index of selected element
       const index = elements.findIndex((el) => el.id === selectedElement.id);
+
       if (index !== -1) {
         updateElement(
           {
