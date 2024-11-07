@@ -1,11 +1,11 @@
-import { createElement } from "./createElement";
+import { createElement } from ".";
 import { toolTypes } from "../../constants";
+import { emitElementUpdate } from "../../socketConn/socketConn";
 import { store } from "../../store/store";
 import { setElements } from "../whiteboardSlice";
-import { emitElementUpdate } from "../../socketConn/socketConn";
 
 export const updateElement = (
-  { id, x1, x2, y1, y2, type, index },
+  { id, x1, x2, y1, y2, type, index, text },
   elements
 ) => {
   // copy 만들어서 새료운 배열의 요소로 대체
@@ -41,11 +41,37 @@ export const updateElement = (
         ],
       };
 
-      const updatePencilElement = elementsCopy[index];
+      const updatedPencilElement = elementsCopy[index];
 
       store.dispatch(setElements(elementsCopy));
 
-      emitElementUpdate(updatePencilElement);
+      emitElementUpdate(updatedPencilElement);
+      break;
+    case toolTypes.TEXT:
+      const textWidth = document
+        .getElementById("canvas")
+        .getContext("2d")
+        .measureText(text).width;
+
+      const textHeight = 24;
+
+      elementsCopy[index] = {
+        ...createElement({
+          id,
+          x1,
+          y1,
+          x2: x1 + textWidth,
+          y2: y1 + textHeight,
+          toolType: type,
+          text,
+        }),
+      };
+
+      const updatedTextElement = elementsCopy[index];
+
+      store.dispatch(setElements(elementsCopy));
+
+      emitElementUpdate(updatedTextElement);
       break;
     default:
       throw new Error("Something went wrong when updating element");

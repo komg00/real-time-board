@@ -3,6 +3,8 @@ import rectangleIcon from "../resources/icons/rectangle.svg";
 import lineIcon from "../resources/icons/line.svg";
 import rubberIcon from "../resources/icons/rubber.svg";
 import pencilIcon from "../resources/icons/pencil.svg";
+import selectionIcon from "../resources/icons/selection.svg";
+import textIcon from "../resources/icons/text.svg";
 import { toolTypes } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setElements, setToolType } from "./whiteboardSlice";
@@ -30,7 +32,7 @@ const IconButton = ({ src, type, isRubber }) => {
         selectedToolType === type ? "menu_button_active" : "menu_button"
       }
     >
-      <img width="80%" height="80%" src={src} alt="img" />
+      <img width="80%" height="80%" src={src} />
     </button>
   );
 };
@@ -42,6 +44,8 @@ const Menu = () => {
       <IconButton src={lineIcon} type={toolTypes.LINE} />
       <IconButton src={rubberIcon} isRubber />
       <IconButton src={pencilIcon} type={toolTypes.PENCIL} />
+      <IconButton src={textIcon} type={toolTypes.TEXT} />
+      <IconButton src={selectionIcon} type={toolTypes.SELECTION} />
     </div>
   );
 };

@@ -13,7 +13,7 @@ export const adjustElementCoordinates = (element) => {
   }
 
   if (type === toolTypes.LINE) {
-    if (x1 < x2 || (x1 === x2 && y1 < y2)) {
+    if (x1 < x2 || (x1 === x2 && y1 < 2)) {
       // drawing started from left to right
       return { x1, y1, x2, y2 };
     } else {
