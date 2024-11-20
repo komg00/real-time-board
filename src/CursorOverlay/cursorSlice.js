@@ -33,6 +33,7 @@ const cursorSlice = createSlice({
   },
 });
 
-export const { updateCursorPosition } = cursorSlice.actions;
+export const { updateCursorPosition, removeCursorPosition } =
+  cursorSlice.actions;
 
 export default cursorSlice.reducer;
