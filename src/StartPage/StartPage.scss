@@ -1,0 +1,20 @@
+.start-page {
+  width: 100%;
+  background: #fcfcfc;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  font-size: 74px;
+  color: #5e5b92;
+  text-align: center;
+}
+
+.card-container {
+  height: 68%;
+  display: flex;
+  margin: 0 auto;
+}
