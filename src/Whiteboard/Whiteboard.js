@@ -20,7 +20,7 @@ import { emitCursorPosition } from "../socketConn/socketConn";
 
 let emitCursor = true;
 let lastCursorPosition;
-let lastEmittedCursorData;
+const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
 
 const Whiteboard = () => {
   const canvasRef = useRef();
@@ -160,14 +160,14 @@ const Whiteboard = () => {
     lastCursorPosition = { x: clientX, y: clientY };
 
     if (emitCursor) {
-      emitCursorPosition({ x: clientX, y: clientY });
+      emitCursorPosition(roomId, { x: clientX, y: clientY });
       emitCursor = false;
 
       console.log("sending-position");
 
       setTimeout(() => {
         emitCursor = true;
-        emitCursorPosition(lastCursorPosition);
+        emitCursorPosition(roomId, lastCursorPosition);
       }, [50]);
     }
 

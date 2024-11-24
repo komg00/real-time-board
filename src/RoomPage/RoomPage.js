@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { connectWithSocketServer, joinRoom } from "./socketConn/socketConn";
-import Whiteboard from "./Whiteboard/Whiteboard";
-import CursorOverlay from "./CursorOverlay/CursorOverlay";
+import { connectWithSocketServer, joinRoom } from "../socketConn/socketConn";
+import Whiteboard from "../Whiteboard/Whiteboard";
+import CursorOverlay from "../CursorOverlay/CursorOverlay";
 
 function RoomPage() {
   const { roomId } = useParams(); // URL에서 roomId 읽기

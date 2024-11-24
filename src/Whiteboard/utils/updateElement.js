@@ -4,11 +4,13 @@ import { emitElementUpdate } from "../../socketConn/socketConn";
 import { store } from "../../store/store";
 import { setElements } from "../whiteboardSlice";
 
+const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
+
 export const updatePencilElementWhenMoving = (
   { index, newPoints },
   elements
 ) => {
-  let elementsCopy = [...elements];
+  const elementsCopy = [...elements];
 
   elementsCopy[index] = {
     ...elementsCopy[index],
@@ -18,7 +20,7 @@ export const updatePencilElementWhenMoving = (
   const updatedPencilElement = elementsCopy[index];
 
   store.dispatch(setElements(elementsCopy));
-  emitElementUpdate(updatedPencilElement);
+  emitElementUpdate(roomId, updatedPencilElement);
 };
 
 export const updateElement = (
@@ -44,7 +46,7 @@ export const updateElement = (
 
       store.dispatch(setElements(elementsCopy));
 
-      emitElementUpdate(updatedElement);
+      emitElementUpdate(roomId, updatedElement);
       break;
     case toolTypes.PENCIL:
       elementsCopy[index] = {
@@ -62,7 +64,7 @@ export const updateElement = (
 
       store.dispatch(setElements(elementsCopy));
 
-      emitElementUpdate(updatedPencilElement);
+      emitElementUpdate(roomId, updatedPencilElement);
       break;
     case toolTypes.TEXT:
       const textWidth = document
@@ -88,7 +90,7 @@ export const updateElement = (
 
       store.dispatch(setElements(elementsCopy));
 
-      emitElementUpdate(updatedTextElement);
+      emitElementUpdate(roomId, updatedTextElement);
       break;
     default:
       throw new Error("Something went wrong when updating element");

@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setElements, setToolType } from "./whiteboardSlice";
 import { emitClearWhiteboard } from "../socketConn/socketConn";
 
+const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
+
 const IconButton = ({ src, type, isRubber }) => {
   const dispatch = useDispatch();
 
@@ -22,7 +24,7 @@ const IconButton = ({ src, type, isRubber }) => {
   const handleClearCanvas = () => {
     dispatch(setElements([]));
 
-    emitClearWhiteboard();
+    emitClearWhiteboard(roomId);
   };
 
   return (
