@@ -1,53 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  apiKeys: {}, // apiKey별로 데이터를 저장
+  tool: null,
+  elements: [],
 };
 
 const whiteboardSlice = createSlice({
   name: "whiteboard",
   initialState,
   reducers: {
-    setToolType(state, action) {
+    setToolType: (state, action) => {
       state.tool = action.payload;
     },
-    setElements: (state, action) => {
-      const { apiKey, elements } = action.payload;
-      state.apiKeys[apiKey] = {
-        ...state.apiKeys[apiKey],
-        elements,
-      };
-    },
     updateElement: (state, action) => {
-      const { apiKey, elementData } = action.payload;
-      const elements = state.apiKeys[apiKey]?.elements || [];
-      const index = elements.findIndex((el) => el.id === elementData.id);
+      const { id } = action.payload;
+
+      const index = state.elements.findIndex((element) => element.id === id);
 
       if (index === -1) {
-        elements.push(elementData);
+        state.elements.push(action.payload);
       } else {
-        elements[index] = elementData;
-      }
+        // 조건을 만족하는 요소가 있을 경우
+        // elements 배열에서 해당 요소 업데이트
 
-      state.apiKeys[apiKey].elements = elements;
-    },
-    setApiKey: (state, action) => {
-      const { apiKey } = action.payload;
-      if (!state.apiKeys[apiKey]) {
-        state.apiKeys[apiKey] = { elements: [] };
+        state.elements[index] = action.payload;
       }
     },
-    clearWhiteboard: (state, action) => {
-      const { apiKey } = action.payload;
-
-      if (state.spaces[apiKey]) {
-        state.spaces[apiKey].elements = [];
-      }
+    setElements: (state, action) => {
+      state.elements = action.payload;
     },
   },
 });
 
-export const { setApiKey, updateElement, setElements, clearWhiteboard } =
+export const { setToolType, updateElement, setElements } =
   whiteboardSlice.actions;
 
 export default whiteboardSlice.reducer;

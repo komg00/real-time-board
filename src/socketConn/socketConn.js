@@ -1,45 +1,31 @@
 import { io } from "socket.io-client";
 import { store } from "../store/store";
 import {
-  setApiKey,
-  updateElement,
-  setElements,
-  clearWhiteboard,
-} from "../Whiteboard/whiteboardSlice";
-import {
   updateCursorPosition,
   removeCursorPosition,
 } from "../CursorOverlay/cursorSlice";
+import { setElements, updateElement } from "../Whiteboard/whiteboardSlice";
 import { createWorkspace } from "../api/api";
 
 let socket;
 
-// 소켓 서버에 연결되면 이 함수 실행
-export const connectWithSocketServer = (apiKey) => {
-  if (!apiKey) return;
-
-  if (socket) {
-    console.warn("Socket is already connected");
-    return;
-  }
-
+export const connectWithSocketServer = () => {
   socket = io("http://localhost:3003");
 
   socket.on("connect", () => {
     console.log("connected to socket.io server");
-    socket.emit("join-space", apiKey);
   });
 
   socket.on("whiteboard-state", (elements) => {
-    store.dispatch(setElements({ apiKey, elements }));
+    store.dispatch(setElements(elements));
   });
 
   socket.on("element-update", (elementData) => {
-    store.dispatch(updateElement({ apiKey, elementData }));
+    store.dispatch(updateElement(elementData));
   });
 
   socket.on("whiteboard-clear", () => {
-    store.dispatch(clearWhiteboard({ apiKey }));
+    store.dispatch(setElements([]));
   });
 
   socket.on("cursor-position", (cursorData) => {
@@ -47,10 +33,10 @@ export const connectWithSocketServer = (apiKey) => {
   });
 
   socket.on("user-disconnected", (disconnectedUserId) => {
-    //store.dispatch(removeCursorPosition(disconnectedUserId));
+    store.dispatch(removeCursorPosition(disconnectedUserId));
   });
 };
-
+/*
 // 스페이스 생성 함수
 export const createSpace = async () => {
   try {
@@ -69,20 +55,29 @@ export const createSpace = async () => {
 };
 
 // 기존 스페이스에 참가 함수
-export const joinSpace = (apiKey) => {
-  store.dispatch(setApiKey(apiKey)); // 현재 스페이스 설정
-  connectWithSocketServer(apiKey);
-  console.log("Joined existing space with apiKey:", apiKey);
+export const joinSpace = (spaceId) => {
+  store.dispatch(setApiKey(spaceId)); // 현재 스페이스 설정
+  connectWithSocketServer(spaceId);
+  console.log("Joined existing space with apiKey:", spaceId);
+};
+*/
+export const emitElementUpdate = (roomId, elementData) => {
+  if (!socket) return;
+  socket.emit("element-update", { roomId, elementData });
 };
 
-export const emitElementUpdate = (apiKey, elementData) => {
-  socket.emit("element-update", { apiKey, ...elementData });
+export const emitClearWhiteboard = (roomId) => {
+  if (!socket) return;
+  socket.emit("whiteboard-clear", roomId);
 };
 
-export const emitClearWhiteboard = (apiKey) => {
-  socket.emit("whiteboard-clear", { apiKey });
+export const emitCursorPosition = (roomId, cursorData) => {
+  if (!socket) return;
+  socket.emit("cursor-position", { roomId, cursorData });
 };
 
-export const emitCursorPosition = (apiKey, cursorData) => {
-  socket.emit("cursor-position", { apiKey, ...cursorData });
+export const joinRoom = (roomId) => {
+  if (!socket) return;
+
+  socket.emit("join-room", roomId);
 };
