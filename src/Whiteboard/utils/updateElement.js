@@ -4,11 +4,10 @@ import { emitElementUpdate } from "../../socketConn/socketConn";
 import { store } from "../../store/store";
 import { setElements } from "../whiteboardSlice";
 
-const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
-
 export const updatePencilElementWhenMoving = (
   { index, newPoints },
-  elements
+  elements,
+  roomId
 ) => {
   const elementsCopy = [...elements];
 
@@ -25,7 +24,8 @@ export const updatePencilElementWhenMoving = (
 
 export const updateElement = (
   { id, x1, x2, y1, y2, type, index, text },
-  elements
+  elements,
+  roomId
 ) => {
   // copy 만들어서 새료운 배열의 요소로 대체
   const elementsCopy = [...elements];

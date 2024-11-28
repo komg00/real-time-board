@@ -48,7 +48,7 @@ function RoomPage() {
 
   return (
     <>
-      <Whiteboard />
+      <Whiteboard roomId={roomId} />
       <CursorOverlay />
     </>
   );

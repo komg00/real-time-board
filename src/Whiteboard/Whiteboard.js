@@ -17,14 +17,16 @@ import {
 import { v4 as uuid } from "uuid";
 import { updateElement as updateElementInStore } from "./whiteboardSlice";
 import { emitCursorPosition } from "../socketConn/socketConn";
+import { useParams } from "react-router-dom";
 
 let emitCursor = true;
 let lastCursorPosition;
-const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
 
 const Whiteboard = () => {
   const canvasRef = useRef();
   const textAreaRef = useRef();
+
+  const { roomId } = useParams();
 
   const toolType = useSelector((state) => state.whiteboard.tool);
   const elements = useSelector((state) => state.whiteboard.elements);
@@ -144,7 +146,8 @@ const Whiteboard = () => {
               y2,
               type: elements[selectedElementIndex].type,
             },
-            elements
+            elements,
+            roomId
           );
         }
       }
@@ -186,7 +189,8 @@ const Whiteboard = () => {
             y2: clientY,
             type: elements[index].type,
           },
-          elements
+          elements,
+          roomId
         );
       }
     }
@@ -213,7 +217,7 @@ const Whiteboard = () => {
       const index = elements.findIndex((el) => el.id === selectedElement.id);
 
       if (index !== -1) {
-        updatePencilElementWhenMoving({ index, newPoints }, elements);
+        updatePencilElementWhenMoving({ index, newPoints }, elements, roomId);
       }
 
       return;
@@ -247,7 +251,8 @@ const Whiteboard = () => {
             index,
             text,
           },
-          elements
+          elements,
+          roomId
         );
       }
     }
@@ -280,7 +285,8 @@ const Whiteboard = () => {
             id: selectedElement.id,
             index: selectedElementIndex,
           },
-          elements
+          elements,
+          roomId
         );
       }
     }
@@ -294,7 +300,8 @@ const Whiteboard = () => {
     if (index !== -1) {
       updateElement(
         { id, x1, y1, type, text: event.target.value, index },
-        elements
+        elements,
+        roomId
       );
 
       setAction(null);
@@ -304,7 +311,7 @@ const Whiteboard = () => {
 
   return (
     <>
-      <Menu />
+      <Menu roomId={roomId} />
       {action === actions.WRITING ? (
         <textarea
           ref={textAreaRef}

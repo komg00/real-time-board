@@ -9,10 +9,10 @@ import { toolTypes } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setElements, setToolType } from "./whiteboardSlice";
 import { emitClearWhiteboard } from "../socketConn/socketConn";
-
-const roomId = "581Q0RR-75CMM2J-JQ1T2F8-0MWVRER";
+import { useParams } from "react-router-dom";
 
 const IconButton = ({ src, type, isRubber }) => {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
 
   const selectedToolType = useSelector((state) => state.whiteboard.tool);
@@ -39,7 +39,7 @@ const IconButton = ({ src, type, isRubber }) => {
   );
 };
 
-const Menu = () => {
+const Menu = ({ roomId }) => {
   return (
     <div className="menu_container">
       <IconButton src={rectangleIcon} type={toolTypes.RECTANGLE} />
