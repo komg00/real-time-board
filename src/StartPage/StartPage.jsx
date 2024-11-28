@@ -6,7 +6,6 @@ import join_space from "../resources/images/join-space.png";
 import { useNavigate } from "react-router-dom";
 
 export default function StartPage() {
-  const [joinCode, setJoinCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -14,35 +13,35 @@ export default function StartPage() {
     try {
       const response = await fetch("http://localhost:3003/api/room");
       const data = await response.json();
-      console.log("New Room ID:", data.roomId);
-      setJoinCode(data.roomId);
-      alert("생성된 코드는 " + data.roomId + " 입니다");
+      return data.roomId; // 생성된 roomId 반환
     } catch (error) {
       console.error("방 생성 오류:", error);
+      throw new Error("방을 생성할 수 없습니다.");
     }
   };
 
-  // 방 참여 함수 (유효성 검증 후 이동)
-  const joinRoom = async () => {
-    if (!joinCode) {
+  const joinRoom = async (inputCode) => {
+    if (!inputCode) {
       setErrorMessage("참여 코드를 입력해주세요.");
-      return;
+      return false;
     }
-
     try {
       const response = await fetch(
-        `http://localhost:3003/api/room/${joinCode}`
+        `http://localhost:3003/api/room/${inputCode}`
       );
       const data = await response.json();
 
       if (response.ok && data.valid) {
-        navigate(`/${joinCode}`); // 방으로 이동
+        navigate(`/${inputCode}`);
+        return true; // 성공적으로 이동
       } else {
         setErrorMessage("유효하지 않은 코드입니다.");
+        return false;
       }
     } catch (error) {
       console.error("방 참여 오류:", error);
       setErrorMessage("서버 오류가 발생했습니다.");
+      return false;
     }
   };
 
@@ -53,21 +52,19 @@ export default function StartPage() {
         <Card
           title="WorkSpace 생성"
           description="워크스페이스를 만들어 참여 코드를 공유하고, 실시간 협업 화이트보드를 시작해 보세요!"
-          buttonText="workspace 생성"
+          buttonText="워크스페이스 생성"
           imageSrc={create_space}
           onClick={createRoom}
-          contents="생성하기"
-          joinCode={joinCode}
           type="create"
         />
         <Card
           title="WorkSpace 참여"
           description="공유받은 참여 코드를 입력하고, 다른 사용자들과 실시간으로 화이트보드를 이용해 보세요!"
-          buttonText="workspace 참여"
+          buttonText="워크스페이스 참여"
           imageSrc={join_space}
           onClick={joinRoom}
-          contents="참여하기"
           type="join"
+          errorMessage={errorMessage}
         />
       </div>
     </div>
