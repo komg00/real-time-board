@@ -6,8 +6,8 @@ import join_space from "../resources/images/join-space.png";
 import { useNavigate } from "react-router-dom";
 
 export default function StartPage() {
-  const [joinCode, setJoinCode] = useState(""); // 참여 코드 입력 값
-  const [errorMessage, setErrorMessage] = useState(""); // 오류 메시지
+  const [joinCode, setJoinCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const createRoom = async () => {
@@ -15,6 +15,7 @@ export default function StartPage() {
       const response = await fetch("http://localhost:3003/api/room");
       const data = await response.json();
       console.log("New Room ID:", data.roomId);
+      setJoinCode(data.roomId);
       alert("생성된 코드는 " + data.roomId + " 입니다");
     } catch (error) {
       console.error("방 생성 오류:", error);
@@ -56,6 +57,8 @@ export default function StartPage() {
           imageSrc={create_space}
           onClick={createRoom}
           contents="생성하기"
+          joinCode={joinCode}
+          type="create"
         />
         <Card
           title="WorkSpace 참여"
@@ -64,6 +67,7 @@ export default function StartPage() {
           imageSrc={join_space}
           onClick={joinRoom}
           contents="참여하기"
+          type="join"
         />
       </div>
     </div>
