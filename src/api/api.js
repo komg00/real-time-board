@@ -1,5 +1,5 @@
 export async function createWorkspace() {
-  const url = "http://localhost:3003/create-space";
+  const url = "http://http://3.34.149.10:3003/create-space";
 
   try {
     const response = await fetch(url, {

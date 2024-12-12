@@ -12,7 +12,9 @@ function RoomPage() {
   // 방 유효성 검증
   const validateRoom = async (roomId) => {
     try {
-      const response = await fetch(`http://localhost:3003/api/room/${roomId}`);
+      const response = await fetch(
+        `http://3.34.149.10:3003/api/room/${roomId}`
+      );
       const data = await response.json();
       if (response.ok && data.valid) {
         setIsValidRoom(true);

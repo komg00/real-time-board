@@ -10,7 +10,7 @@ import { createWorkspace } from "../api/api";
 let socket;
 
 export const connectWithSocketServer = () => {
-  socket = io("http://localhost:3003");
+  socket = io("http://3.34.149.10:3003");
 
   socket.on("connect", () => {
     console.log("connected to socket.io server");

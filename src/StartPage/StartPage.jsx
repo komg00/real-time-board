@@ -3,15 +3,13 @@ import "./StartPage.scss";
 import Card from "../Card/Card";
 import create_space from "../resources/images/create-space.png";
 import join_space from "../resources/images/join-space.png";
-import { useNavigate } from "react-router-dom";
 
 export default function StartPage() {
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
   const createRoom = async () => {
     try {
-      const response = await fetch("http://localhost:3003/api/room");
+      const response = await fetch("http://3.34.149.10:3003/api/room");
       const data = await response.json();
       return data.roomId; // 생성된 roomId 반환
     } catch (error) {
@@ -27,13 +25,13 @@ export default function StartPage() {
     }
     try {
       const response = await fetch(
-        `http://localhost:3003/api/room/${inputCode}`
+        `http://3.34.149.10:3003/api/room/${inputCode}`
       );
       const data = await response.json();
 
       if (response.ok && data.valid) {
-        navigate(`/${inputCode}`);
-        return true; // 성공적으로 이동
+        window.open(`/${inputCode}`, "_blank");
+        return true;
       } else {
         setErrorMessage("유효하지 않은 코드입니다.");
         return false;
